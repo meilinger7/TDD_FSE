@@ -42,7 +42,7 @@ public class MyTestFactory {
         kinoVerwaltungOriginal.einplanenVorstellung(zweiteVorstellungOriginal);
     }
 
-    @DisplayName("Massentest Ticketkauf laut lösung")
+    @DisplayName("Massentest Ticketkauf mit Stream")
     @TestFactory
     public Stream<DynamicTest> kaufeTicketStream() {
 
@@ -70,6 +70,39 @@ public class MyTestFactory {
                             }));
                 });
 
+    }
+
+    @DisplayName("Massentest Ticketkauf mit Collection")
+    @TestFactory
+    public Collection<DynamicTest> kaufeTicketCollection() {
+
+        List<DynamicTest> testListe = new ArrayList<>();
+
+        for (int i = 0; i < 50; i++) {
+            Random random = new Random(999);
+            int bewertung = random.nextInt(1000)+1;
+            System.out.println(bewertung);
+
+            Vorstellung vorstellung = kinoVerwaltungOriginal.getVorstellungen().get(i % 2);
+            char reihe = (char) ((i % 10) + 65);
+            int platz = i % 15;
+            int geld = i % 50;
+
+            testListe.add(dynamicTest(vorstellung.getFilm() + ", " + reihe + platz + ", " + geld + "€",
+                    () -> assertDoesNotThrow(() -> {
+                        try {
+                            kinoVerwaltungOriginal.kaufeTicket(vorstellung, reihe, platz, geld);
+                        } catch (IllegalArgumentException e) {
+                            boolean errGeld = "Nicht ausreichend Geld.".equals(e.getMessage());
+                            boolean errPlatz = e.getMessage().contains("existiert nicht");
+                            assertTrue(errGeld || errPlatz);
+                        } catch (IllegalStateException e) {
+                            assertTrue(e.getMessage().contains("ist bereits belegt."));
+                        }
+                    })));
+        }
+
+        return testListe;
     }
 
 
