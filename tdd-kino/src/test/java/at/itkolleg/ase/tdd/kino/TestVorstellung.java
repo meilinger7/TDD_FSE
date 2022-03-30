@@ -64,6 +64,13 @@ public class TestVorstellung {
         assertEquals("Hangover", vorstellungOriginal.getFilm(), "Falscher Film");
     }
 
+
+    @Test
+    void testVorstellungKaufeTicket() {
+        Ticket ticket = vorstellungOriginal.kaufeTicket('A', 5, 15F);
+        assertEquals(ticket.getClass(), Ticket.class);
+    }
+
     @Test
     void testExpectedExceptionNichtAusreichendGeld() {
         assertThrows(IllegalArgumentException.class, () -> {

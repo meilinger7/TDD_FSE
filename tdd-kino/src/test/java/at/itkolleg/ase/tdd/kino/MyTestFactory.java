@@ -1,9 +1,6 @@
 package at.itkolleg.ase.tdd.kino;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -42,6 +39,7 @@ public class MyTestFactory {
         kinoVerwaltungOriginal.einplanenVorstellung(zweiteVorstellungOriginal);
     }
 
+    @Disabled
     @DisplayName("Massentest Ticketkauf mit Stream")
     @TestFactory
     public Stream<DynamicTest> kaufeTicketStream() {
@@ -49,7 +47,7 @@ public class MyTestFactory {
 
         return new Random(999)
                 .ints(0, 1000)
-                .limit(100)
+                .limit(10)
                 .mapToObj(i -> {
                     Vorstellung vorstellung = kinoVerwaltungOriginal.getVorstellungen().get(i % 2);
                     char reihe = (char) ((i % 10) + 65);
@@ -78,11 +76,8 @@ public class MyTestFactory {
 
         List<DynamicTest> testListe = new ArrayList<>();
 
-        for (int i = 0; i < 50; i++) {
-            Random random = new Random(999);
-            int bewertung = random.nextInt(1000)+1;
-            System.out.println(bewertung);
 
+        for (int i = 0; i < 10; i++) {
             Vorstellung vorstellung = kinoVerwaltungOriginal.getVorstellungen().get(i % 2);
             char reihe = (char) ((i % 10) + 65);
             int platz = i % 15;
